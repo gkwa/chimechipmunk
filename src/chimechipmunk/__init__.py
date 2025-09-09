@@ -1,5 +1,6 @@
 import argparse
 import pathlib
+import sys
 import typing
 
 import tomlkit
@@ -128,7 +129,8 @@ def add_pyright_config_to_toml(file_path: pathlib.Path) -> None:
         f.write(tomlkit.dumps(doc))
 
 
-def main() -> None:
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         description="Add configuration to pyproject.toml files"
     )
@@ -154,14 +156,22 @@ def main() -> None:
         help="Add all configurations (ruff and pyright)",
     )
 
-    args: argparse.Namespace = parser.parse_args()
+    return parser.parse_args()
+
+
+def main() -> None:
+    args: argparse.Namespace = parse_args()
     file_path: pathlib.Path = pathlib.Path(args.file_path)
 
     if not file_path.exists():
-        return
+        print(f"Error: File '{file_path}' does not exist", file=sys.stderr)
+        sys.exit(1)
 
     if file_path.suffix != ".toml":
-        pass
+        print(
+            f"Warning: File '{file_path}' does not have a .toml extension",
+            file=sys.stderr,
+        )
 
     # Default to all if no specific flags are provided
     if not (args.ruff or args.pyright or args.all):
