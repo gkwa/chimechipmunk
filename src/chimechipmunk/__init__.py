@@ -11,63 +11,6 @@ def add_ruff_config_to_toml(file_path: pathlib.Path) -> None:
     # Read the existing TOML file
     with file_path.open(encoding="utf-8") as f:
         doc: tomlkit.TOMLDocument = tomlkit.parse(f.read())
-
-    # Create the ruff configuration (removed COM812 to avoid formatter conflicts)
-    ruff_lint_rules: list[str] = [
-        "A",
-        "AIR",
-        "ARG",
-        "ASYNC",
-        "ASYNC1",
-        "B",
-        "C",
-        "C4",
-        "C90",
-        "DJ",
-        "DTZ",
-        "E",
-        "EM",
-        "ERA",
-        "EXE",
-        "F",
-        "FA",
-        "FBT",
-        "FIX",
-        "FLY",
-        "G",
-        "I",
-        "ICN",
-        "INP",
-        "INT",
-        "ISC",
-        "LOG",
-        "N",
-        "NPY",
-        "PD",
-        "PIE",
-        "PL",
-        "PT",
-        "PTH",
-        "PYI",
-        "Q",
-        "R",
-        "RET",
-        "RSE",
-        "RUF",
-        "S",
-        "SIM",
-        "SLF",
-        "SLOT",
-        "T10",
-        "T20",
-        "TD",
-        "TID",
-        "TRY",
-        "UP",
-        "W",
-        "YTT",
-    ]
-
     # Ensure [tool] section exists
     try:
         tool_section: typing.Any = doc["tool"]
@@ -91,10 +34,9 @@ def add_ruff_config_to_toml(file_path: pathlib.Path) -> None:
     except KeyError:
         ruff_section["lint"] = tomlkit.table()
         lint_section = ruff_section["lint"]
-
-    # Add the select configuration
-    lint_section["select"] = ruff_lint_rules
-
+    # Add the select and ignore configuration
+    lint_section["select"] = ["ALL"]
+    lint_section["ignore"] = ["T201", "CPY001"]
     # Write the modified TOML back to the file
     with file_path.open("w", encoding="utf-8") as f:
         f.write(tomlkit.dumps(doc))
