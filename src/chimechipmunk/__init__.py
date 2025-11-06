@@ -76,23 +76,23 @@ def parse_args() -> argparse.Namespace:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         description="Add configuration to pyproject.toml files"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "file_path",
         nargs="?",
         default="pyproject.toml",
         help="Path to the TOML file to modify (default: pyproject.toml)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--ruff",
         action="store_true",
         help="Add ruff lint configuration",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--pyright",
         action="store_true",
         help="Add pyright configuration",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--all",
         action="store_true",
         help="Add all configurations (ruff and pyright)",
